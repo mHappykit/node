@@ -167,7 +167,7 @@ app.get('/vast', (req, res) => {
                                 <![CDATA[ https://s3-user-b6a1f8-default-bucket.storage.clo.ru/mish/content-avi.avi?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=JBBBDVKX6T3EBNE44A0L/20250327/us-east-1/s3/aws4_request&X-Amz-Date=20250327T084157Z&X-Amz-Expires=604798&X-Amz-SignedHeaders=host&X-Amz-Signature=eb522683c4fb2d4d0bddb4896921d1730963e026e65313dd5d2f5cc5e3952988 ]]>
                             </MediaFile>
                             <MediaFile delivery="progressive" type="video/mp4" width="800" height="450" bitrate="818" scalable="true" maintainAspectRatio="true">
-                                <![CDATA[ https://s3-user-b6a1f8-default-bucket.storage.clo.ru/mish/ads.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=JBBBDVKX6T3EBNE44A0L/20250812/default/s3/aws4_request&X-Amz-Date=20250812T082715Z&X-Amz-Expires=604798&X-Amz-SignedHeaders=host&X-Amz-Signature=5696ccbad37012e7852dd74e900f4d452e4236cde7508dd7b715288152f57d30]]>
+                                <![CDATA[ https://s3-user-b6a1f8-default-bucket.storage.clo.ru/mish/ads.mp4?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=JBBBDVKX6T3EBNE44A0L/20250819/default/s3/aws4_request&X-Amz-Date=20250819T091750Z&X-Amz-Expires=604798&X-Amz-SignedHeaders=host&X-Amz-Signature=c45df0b83b412fe2d627ff172c1d06febbb9d757b60576e4b127f799b8bd9fa0]]>
                             </MediaFile>
                         </MediaFiles>
                     </Linear>
