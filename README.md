@@ -1,6 +1,6 @@
 # Counter API
 
-Простой REST API для управления счетчиком на Node.js с Express.
+Простой REST API для управления счетчиком на Node.js с Express. Также содержит прокси-эндпоинт для курсов валют Pegast и тестовые VAST-эндпоинты.
 
 ## Установка
 
@@ -20,6 +20,9 @@ npm start
 
 Сервер будет доступен по адресу: `http://localhost:6060`
 
+### Переменные окружения
+- `PORT` (опционально): порт сервера. По умолчанию `6060`.
+
 ## Деплой
 
 ### Render (рекомендуется)
@@ -27,22 +30,6 @@ npm start
 2. Создайте новый Web Service
 3. Подключите ваш GitHub репозиторий
 4. Render автоматически обнаружит `render.yaml` и настроит деплой
-
-### Railway
-1. Зарегистрируйтесь на [railway.app](https://railway.app)
-2. Создайте новый проект
-3. Подключите GitHub репозиторий
-4. Railway автоматически настроит деплой
-
-### Vercel
-1. Установите Vercel CLI: `npm i -g vercel`
-2. Запустите: `vercel`
-3. Следуйте инструкциям
-
-### Heroku
-1. Установите Heroku CLI
-2. Создайте приложение: `heroku create your-app-name`
-3. Деплой: `git push heroku main`
 
 ## API Endpoints
 
@@ -94,9 +81,34 @@ npm start
 }
 ```
 
-### 5. Информация об API
-- **URL:** `GET /`
-- **Описание:** Возвращает информацию о доступных эндпоинтах и текущем состоянии
+### 5. Курс валют (Pegast)
+- **URL:** `POST /exchange-rates`
+- **Описание:** Проксирует запрос к `https://agency.pegast.ru/ExchangeRates/GetExchangeRates`. 
+- **Тело запроса:** `application/json`
+```json
+{ "date": "YYYY-MM-DD" }
+```
+  - `date` (опционально): если не указано, отправляется `null`.
+- **Успешный ответ:**
+```json
+{
+  "success": true,
+  "data": { /* ответ Pegast, возможно большой */ }
+}
+```
+- **Ответ об ошибке (пример):**
+```json
+{ "error": "Ошибка при получении курсов" }
+```
+
+### 6. Тестовый VAST XML
+- **URL:** `GET /vast`
+- **Описание:** Возвращает тестовый VAST XML (Content-Type: `application/xml`). Также логирует запрос в файл `vast_requests.log` (содержит `IP`, `Origin`, `Referer`).
+- **Ответ:** XML-документ VAST 4.2.
+
+### 7. Проксированный VAST XML
+- **URL:** `GET /proxyVast`
+- **Описание:** Проксирует XML из `https://counter-ads.onrender.com/vast` и возвращает как `application/xml`.
 
 ## Примеры использования
 
@@ -113,28 +125,24 @@ curl http://localhost:6060/requests
 
 # Получить значение счетчика
 curl http://localhost:6060/counter
+
+# Получить курсы валют (с датой)
+curl -X POST http://localhost:6060/exchange-rates \
+  -H "Content-Type: application/json" \
+  -d '{"date":"2025-08-11"}'
+
+# Получить курсы валют (без даты)
+curl -X POST http://localhost:6060/exchange-rates \
+  -H "Content-Type: application/json" \
+  -d '{}'
+
+# Получить тестовый VAST XML
+curl http://localhost:6060/vast
+
+# Получить проксированный VAST XML
+curl http://localhost:6060/proxyVast
 ```
 
-### JavaScript (fetch)
-```javascript
-// Увеличить счетчик
-fetch('http://localhost:6060/increment', { method: 'POST' })
-  .then(response => response.json())
-  .then(data => console.log(data));
+## Логи
 
-// Обнулить счетчик
-fetch('http://localhost:6060/reset', { method: 'POST' })
-  .then(response => response.json())
-  .then(data => console.log(data));
-
-// Получить количество запросов
-fetch('http://localhost:6060/requests')
-  .then(response => response.json())
-  .then(data => console.log(data));
-```
-
-## Технологии
-
-- Node.js
-- Express.js
-- CORS middleware 
+- `vast_requests.log` — файл с логами запросов к `GET /vast` (дата/время, IP, Origin, Referer).
